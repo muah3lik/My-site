@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Test 🎀</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap');
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffe5ec;
+            font-family: 'Cairo', sans-serif;
+            overflow: hidden;
+        }
+
+        /* البطاقة الأساسية */
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
+            text-align: center;
+            border: 4px solid #ffb3c1;
+            width: 320px;
+            z-index: 10;
+            transition: 0.5s;
+        }
+
+        /* القطة الكيوت */
+        .cat-img {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 20px;
+            border-radius: 20px;
+        }
+
+        h1 {
+            color: #ff4d6d;
+            font-size: 1.8rem;
+            margin: 10px 0 25px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            height: 60px;
+        }
+
+        button {
+            padding: 10px 25px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        #yesBtn {
+            background-color: #ff4d6d;
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4);
+        }
+
+        #noBtn {
+            background-color: #fb6f92;
+            color: white;
+            position: relative; /* كيبدا عادي */
+        }
+
+        /* رسالة النجاح */
+        #success-msg {
+            display: none;
+            animation: celebrate 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes celebrate {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .heart-particle {
+            position: absolute;
+            pointer-events: none;
+            animation: fly 3s linear forwards;
+        }
+
+        @keyframes fly {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1.5) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card" id="mainCard">
+        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHYycWp6ZzR5bmZpZzR5bmZpZzR5bmZpZzR5bmZpZzR5bmZpZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cLS1uOGE78EzK/giphy.gif" alt="cat" class="cat-img" id="catDisplay">
+        
+        <div id="quiz">
+            <h1>واش كتبغيني؟ 🎀</h1>
+            <div class="buttons">
+                <button id="yesBtn">آه 💖</button>
+                <button id="noBtn">لا 🥺</button>
+            </div>
+        </div>
+
+        <div id="success-msg">
+            <h1 style="font-size: 2.5rem;">يااااي! 🌸✨</h1>
+            <p style="color: #ff4d6d; font-weight: bold;">كنت عارفك كتحماقي عليا! 🧸</p>
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const catDisplay = document.getElementById('catDisplay');
+        const quiz = document.getElementById('quiz');
+        const successMsg = document.getElementById('success-msg');
+
+        const catCrying = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHYycWp6ZzR5bmZpZzR5bmZpZzR5bmZpZzR5bmZpZzR5bmZpZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/BEob5W7kSrcNH7ODmu/giphy.gif";
+        const catHappy = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHYycWp6ZzR5bmZpZzR5bmZpZzR5bmZpZzR5bmZpZzR5bmZpZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/MDJ9IbxxvDUQM/giphy.gif";
+
+        let noClickCount = 0;
+
+        const moveNo = () => {
+            // كيرجع الزر "طائر" بمجرد ما يقيسو الماوس
+            noBtn.style.position = 'fixed';
+            
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 40) + 20;
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 40) + 20;
+            
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+            
+            // تغيير القطة لقطة حزينة
+            catDisplay.src = catCrying;
+            
+            // تكبير زر "آه"
+            noClickCount++;
+            let newSize = 1.2 + (noClickCount * 0.2);
+            yesBtn.style.transform = `scale(${newSize})`;
+        };
+
+        noBtn.addEventListener('mouseover', moveNo);
+        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveNo(); });
+
+        yesBtn.addEventListener('click', () => {
+            quiz.style.display = 'none';
+            successMsg.style.display = 'block';
+            catDisplay.src = catHappy;
+            
+            // انفجار قلوب
+            setInterval(createHeart, 150);
+        });
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart-particle';
+            heart.innerHTML = ['💖','🌸','✨','💗','🎀'][Math.floor(Math.random()*5)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = '100vh';
+            heart.style.fontSize = Math.random() * 20 + 20 + 'px';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 3000);
+        }
+    </script>
+</body>
+</html>
+
