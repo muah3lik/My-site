@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love Test 🎀</title>
+
+<style>
+  :root {
+    --primary-color: #ff85a1;
+    --bg-color: #ffe5ec;
+  }
+
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* كيمنع السكرول لو وقع خطأ */
+    font-family: 'Arial', sans-serif;
+    background: radial-gradient(circle, #ffe5ec, #ffc2d1);
+  }
+
+  .container {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(8px);
+    padding: 30px;
+    border-radius: 40px;
+    border: 4px solid white;
+    z-index: 10;
+    text-align: center;
+    width: 280px; /* حجم ثابت باش ما يتأثرش بالحركات */
+  }
+
+  h1 {
+    color: #ff4d6d;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+
+  .buttons-container {
+    position: relative;
+    height: 150px;
+    width: 100%;
+  }
+
+  button {
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+  }
+
+  #yes {
+    background: #ff85a1;
+    color: white;
+    position: relative;
+    transition: all 0.3s ease;
+  }
+
+  #no {
+    background: #ffcad4;
+    color: #ff4d6d;
+    position: fixed; /* ضروري باش يتحرك في الشاشة كاملة بدقة */
+    transition: all 0.1s ease; /* سرعة الحركة */
+    white-space: nowrap;
+    z-index: 9999;
+  }
+
+  #message {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 30px;
+    border-radius: 30px;
+    font-size: 1.8rem;
+    color: #ff4d6d;
+    box-shadow: 0 10px 40px rgba(255, 77, 109, 0.3);
+    z-index: 10000;
+    text-align: center;
+    border: 5px solid #ff85a1;
+  }
+</style>
+</head>
+<body>
+
+  <div class="container" id="mainContainer">
+    <h1>واش كتبغيني؟ 🎀🧸</h1>
+    <div class="buttons-container">
+      <button id="yes">آه كنبغيك 🌸</button>
+      <button id="no">لا 🥺</button>
+    </div>
+  </div>
+
+  <div id="message">ياي! فرحتيني بزاف 🧸💖</div>
+
+  <script>
+    const yesBtn = document.getElementById("yes");
+    const noBtn = document.getElementById("no");
+    const message = document.getElementById("message");
+
+    const refusalTexts = ["لا 🥺", "عافاك؟ 🐥", "فكر عاود 🎀", "ميمكنش! 🍓"];
+    let count = 0;
+
+    const moveButton = () => {
+      // 1. حساب أبعاد الزر
+      const btnWidth = noBtn.offsetWidth;
+      const btnHeight = noBtn.offsetHeight;
+
+      // 2. حساب أقصى مساحة ممكنة (العرض والطول ديال المتصفح)
+      // نقصنا 30 بيكسل كـ "أمان" باش ما يقيسش الجناب بزاف
+      const maxX = window.innerWidth - btnWidth - 20;
+      const maxY = window.innerHeight - btnHeight - 20;
+
+      // 3. توليد مكان عشوائي وسط المساحة الآمنة
+      const randomX = Math.max(20, Math.floor(Math.random() * maxX));
+      const randomY = Math.max(20, Math.floor(Math.random() * maxY));
+
+      // 4. تطبيق الإحداثيات
+      noBtn.style.left = randomX + "px";
+      noBtn.style.top = randomY + "px";
+
+      // تغيير النص
+      noBtn.innerText = refusalTexts[count % refusalTexts.length];
+      count++;
+
+      // تكبير زر نعم
+      let currentSize = parseInt(window.getComputedStyle(yesBtn).fontSize);
+      if (currentSize < 80) {
+        yesBtn.style.fontSize = (currentSize + 3) + "px";
+      }
+    };
+
+    // الحركة عند ملامسة الماوس أو اللمس في الهاتف
+    noBtn.addEventListener("mouseover", moveButton);
+    noBtn.addEventListener("touchstart", (e) => {
+      e.preventDefault(); // كيمنع النقر الحقيقي فالهاتف
+      moveButton();
+    });
+
+    yesBtn.addEventListener("click", () => {
+      document.getElementById("mainContainer").style.display = "none";
+      noBtn.style.display = "none";
+      message.style.display = "block";
+    });
+  </script>
+
+</body>
+</html>
